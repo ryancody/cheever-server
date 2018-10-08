@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/ryancody/cheever-server#readme",
   "dependencies": {
+    "express": "^4.16.3",
     "puppeteer": "^1.9.0"
   }
 }
