@@ -1,0 +1,22 @@
+{
+  "name": "cheever-server",
+  "version": "1.0.0",
+  "description": "\"server-side cheever app\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryancody/cheever-server.git"
+  },
+  "author": "r.cody",
+  "license": "",
+  "bugs": {
+    "url": "https://github.com/ryancody/cheever-server/issues"
+  },
+  "homepage": "https://github.com/ryancody/cheever-server#readme",
+  "dependencies": {
+    "puppeteer": "^1.9.0"
+  }
+}
