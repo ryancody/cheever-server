@@ -1,0 +1,25 @@
+//api info
+//http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=86CBE831DEDFFCF0E3C93C2EF212116E&steamids=76561198028021017
+{
+    "response": {
+        "players": [
+            {
+                "steamid": "76561198028021017",
+                "communityvisibilitystate": 3,
+                "profilestate": 1,
+                "personaname": "Olgo",
+                "lastlogoff": 1539310454,
+                "profileurl": "https://steamcommunity.com/profiles/76561198028021017/",
+                "avatar": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/ed/edc2b4f2ac7f2cb5ba9497019e0858c3ecba15a2.jpg",
+                "avatarmedium": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/ed/edc2b4f2ac7f2cb5ba9497019e0858c3ecba15a2_medium.jpg",
+                "avatarfull": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/ed/edc2b4f2ac7f2cb5ba9497019e0858c3ecba15a2_full.jpg",
+                "personastate": 4,
+                "realname": "Ryan",
+                "primaryclanid": "103582791429607238",
+                "timecreated": 1279835457,
+                "personastateflags": 0,
+                "loccountrycode": "US"
+            }
+        ]
+    }
+}
