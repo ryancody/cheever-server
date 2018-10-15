@@ -23,3 +23,6 @@
         ]
     }
 }
+
+// http://api.steampowered.com/ISteamApps/GetAppList/v0002/?key=STEAMKEY&format=json
+// returns all steam apps (3.6mb, 2MM+ entries)
