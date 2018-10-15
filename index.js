@@ -1,8 +1,9 @@
 const express = require('express')
 const fs = require('fs')
 const puppeteer = require('puppeteer')
+const maintainDb = require('./modules/maintainDb')
 
-const settings = JSON.parse( fs.readFileSync('settings.json') )
+const settings = JSON.parse( fs.readFileSync(__dirname+'/data/settings.json') )
 console.log("settings:")
 console.log(settings)
 
@@ -17,6 +18,19 @@ app.use(express.static('public'))
 
 // call scrape when /scrape is requested
 app.get('/scrape', scrape)
+
+// run maintainDb when /maintain is requested
+app.get('/maintain', checkAppDatabase)
+
+// scrape for cheevos
+app.get('/getCheevos', getCheevos)
+
+async function getCheevos(request, response){
+    let appid = request.query.appid
+    console.log(appid)
+    await maintainDb.getCheevs(appid)
+    response.send('done!')
+}
 
 async function scrape(request, response){
 
@@ -38,6 +52,11 @@ async function scrape(request, response){
     }catch(e){
         console.log(e)
     }
+}
+
+async function checkAppDatabase (request, response) {
+    response.send('connecting to sql...')
+    maintainDb.run()
 }
 
 async function grabData(page, selector){
