@@ -25,10 +25,25 @@ app.get('/maintain', checkAppDatabase)
 // scrape for cheevos
 app.get('/getCheevos', getCheevos)
 
+maintainDb.test()
+
 async function getCheevos(request, response){
     let appid = request.query.appid
     console.log(appid)
     await maintainDb.getCheevs(appid)
+    response.send('done!')
+}
+
+app.get('/bucket', bucket)
+async function bucket(request, response){
+    await maintainDb.bucket()
+    response.send('bucketing')
+}
+
+app.get('/img', getImg)
+
+async function getImg(request, response) {
+    await maintainDb.getImg()
     response.send('done!')
 }
 
