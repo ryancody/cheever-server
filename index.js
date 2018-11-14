@@ -7,8 +7,8 @@ const app = express()
 // or process.env.PORT, heroku - dynamically assigned
 const server = app.listen(process.env.PORT || 5000)
 
-// serve /public when /public is requested
-app.use(express.static('/public'))
+// serve /public when public is requested
+app.use(express.static('public'))
 
 // run 'run' when /run is requested
 app.get('/run', run)
