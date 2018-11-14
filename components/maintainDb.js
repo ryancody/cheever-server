@@ -1,7 +1,6 @@
 const fs = require('fs')
 const mongoDb = require('mongodb')
 const puppeteer = require('puppeteer')
-const AWS = require('aws-sdk')
 const appData = JSON.parse( fs.readFileSync(__dirname + '/../data/steam-apps.json') ).applist
 const dbInstance = require('./dbInstance')
 
@@ -92,7 +91,7 @@ exports.test = async () => {
 
     let imgBuffer = await data.buffer();
 
-    fs.writeFileSync("./img.png", imgBuffer, function(err) {
+    fs.writeFileSync("./test-data/img.png", imgBuffer, function(err) {
         if(err) {
             return console.log(err);
         }
