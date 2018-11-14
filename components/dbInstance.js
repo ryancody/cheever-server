@@ -1,5 +1,6 @@
 
 const mongoDb = require('mongodb')
+const fs = require('fs')
 
 // since settings is set out here, it does not need 'this' to reference within a function
 // if settings were set in a function, it would need 'this' ... why?
@@ -44,10 +45,14 @@ exports.findOneAndUpdate = async (query, data) => {
 }
 
 // find a document
-exports.find = async (query) => {
+exports.findOne = async (query) => {
     checkSettings()
-    let doc = await db.collection( settings.collection ).find( query )
+    console.log('querying',query)
+    
+    query = parseInt(query)
+    let doc = await db.collection( settings.collection ).findOne( {appid:query} )
     console.log('find',doc)
+    fs.writeFileSync('./resp.json',JSON.stringify(doc))
 }
 
 // insert array of documents
