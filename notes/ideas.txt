@@ -1,0 +1,5 @@
+Bounties
+-- search for achievements with no description
+-- if activity is low, put them on front page with a bounty
+-- bounties are worth more points for comments
+-- bounties change daily
