@@ -36,11 +36,18 @@ exports.open = async () => {
     }
 }
 
-// find a document
+// find a document and update it
 exports.findOneAndUpdate = async (query, data) => {
     checkSettings()
     let doc = await db.collection( settings.collection ).findOneAndUpdate( query, {$set: data} )
     console.log('findoneandupdate',doc)
+}
+
+// find a document
+exports.find = async (query) => {
+    checkSettings()
+    let doc = await db.collection( settings.collection ).find( query )
+    console.log('find',doc)
 }
 
 // insert array of documents
