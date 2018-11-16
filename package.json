@@ -19,11 +19,10 @@
   },
   "homepage": "https://github.com/ryancody/cheever-server#readme",
   "dependencies": {
-    "aws-sdk": "^2.334.0",
     "express": "^4.16.3",
+    "firebase-admin": "^6.1.0",
     "mongodb": "^3.1.8",
     "puppeteer": "^1.9.0",
-    "request": "^2.88.0",
     "request-promise": "^4.2.2"
   },
   "devDependencies": {
