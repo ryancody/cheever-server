@@ -9,8 +9,6 @@ let settings = {
     collection:null
 }
 
-let init = false
-
 let client, connect, db
 
 let tester
@@ -41,7 +39,8 @@ exports.open = async () => {
 exports.findOneAndUpdate = async (query, data) => {
     checkSettings()
     let doc = await db.collection( settings.collection ).findOneAndUpdate( query, {$set: data} )
-    console.log('findoneandupdate',doc)
+    console.log('find one and update',doc)
+    return doc
 }
 
 // find a document
@@ -53,6 +52,7 @@ exports.findOne = async (query) => {
     let doc = await db.collection( settings.collection ).findOne( {appid:query} )
     console.log('find',doc)
     fs.writeFileSync('./resp.json',JSON.stringify(doc))
+    return doc
 }
 
 // insert array of documents

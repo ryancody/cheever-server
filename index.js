@@ -1,6 +1,6 @@
 const express = require('express')
-const maintainDb = require('./components/maintainDb')
 const dbInstance = require('./components/dbInstance')
+const maintainDb = require('./components/maintainDb')
 
 const app = express()
 
@@ -8,46 +8,97 @@ const app = express()
 // or process.env.PORT, heroku - dynamically assigned
 const server = app.listen(process.env.PORT || 5000)
 
+// dbOptions to be sent to dbinstance init
+const dbOptions = {dbName:'cheever-db', collection:'test'}
+
 // serve /public when public is requested
 app.use(express.static('public'))
 
+// start the server
 start()
 
-// return document when appid is passed
-app.get('/getDoc', getDoc)
-async function getDoc (req, resp) {
+// return entry when appid is passed
+app.get('/get', get)
+async function get (req, res) {
 
-    let appid = req.query.appid
+    res.append('Content-Type', 'application/json')
+    res.append('Access-Control-Allow-Origin', '*')
+
+    await dbInstance.open()
+
+    try {
+        appid = checkAppid(req.query.appid)
+    }catch(e) {
+        console.log('caught', e)
+    }
 
     let doc = await dbInstance.findOne(appid)
-    resp.send(doc)
+
+    dbInstance.close()
+
+    console.log(doc)
+
+    res.send(doc)
 }
 
-async function start() {
+// scrape cheevos based on appid
+app.get('/populateApp', populateApp)
+async function populateApp (req, res) {
 
-    dbInstance.init({dbName:'cheever-db', collection:'test'})
+    res.append('Content-Type', 'application/json')
+    res.append('Access-Control-Allow-Origin', '*')
+
     await dbInstance.open()
-    console.log('listening on ', process.env.PORT)
+
+    try {
+        appid = checkAppid(req.query.appid)
+    }catch(e) {
+        console.log('caught', e)
+    }
+
+    let doc = await maintainDb.populateApp(appid)
+
+    dbInstance.close()
+
+    console.log('doc returned successfully')
+    //console.log(doc)
+
+    res.send(doc)
 }
 
+async function start () {
 
+    try{
+        console.log('testing db connection...')
+        dbInstance.init(dbOptions)
+        await dbInstance.open()
+        await dbInstance.close()
+    }catch(e){
+        console.log(e)
+    }
 
-/* testing below */
-
-
-// run 'run' when /run is requested
-app.get('/run', run)
-
-async function run (req, resp) {
-    let appid = req.query.appid
-    resp.send(`querying ${appid}`)
-    maintainDb.run(appid)
+    dbInstance.init(dbOptions)
+    console.log('listening on port: ' + server.address().port)
 }
 
-app.get('/test', test)
+function checkAppid (appid) {
 
-// maintainDb.test()
-async function test (req, resp) {
-    maintainDb.test()
-    resp.send('testing...')
+    
+    appid = parseInt(appid)
+    
+    let reg = /^\d+$/
+
+    if(!reg.test(appid)){
+        throw 'appid must be an integer'
+    }
+    
+    if(appid === ''){
+        throw 'appid blank'
+    }
+
+    if(!appid){
+        throw 'appid undefined'
+    }
+
+    return appid
 }
