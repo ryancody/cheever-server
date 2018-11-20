@@ -1,6 +1,6 @@
 const express = require('express')
-const dbInstance = require('./components/dbInstance')
-const maintainDb = require('./components/maintainDb')
+const dbInstance = require('./components/db-instance')
+const maintainDb = require('./components/maintain-db')
 
 const app = express()
 
@@ -36,7 +36,8 @@ async function get (req, res) {
 
     dbInstance.close()
 
-    console.log(doc)
+    console.log('request returned successfully')
+    //console.log(doc)
 
     res.send(doc)
 }

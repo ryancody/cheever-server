@@ -1,13 +1,19 @@
 const fs = require('fs')
 const mongoDb = require('mongodb')
-const dbInstance = require('./dbInstance')
+const dbInstance = require('./db-instance')
 const puppeteer = require('puppeteer')
 const request = require('request-promise')
 const appData = JSON.parse( fs.readFileSync(__dirname + '/../data/steam-apps.json') ).applist
+const s3 = require('./s3-instance')
+const md5 = require('md5')
 
 const dbSettings = {
     dbName:'cheever-db',
     collection:'test'
+}
+
+const s3settings = {
+    bucketName:'cheever'
 }
 
 getPageUrl = (appid) => {
@@ -20,7 +26,7 @@ exports.populateApp = async (appid) => {
     
     try{
         cheevs = await scrape(appid)
-        await addImgData(cheevs)
+        await addImgData(appid,cheevs)
         let doc = await dbInstance.findOneAndUpdate({appid:appid}, {achievements:cheevs})
         console.log('update complete: ' + appid)
         return doc
@@ -29,6 +35,7 @@ exports.populateApp = async (appid) => {
     }
 }
 
+// scrape a site by app id, return achievements with name description and icon path
 scrape = async (appid) => {
     
     try{
@@ -46,13 +53,11 @@ scrape = async (appid) => {
             
             row.forEach( (value) => {
 
-                console.log(value)
-
                 achievements.push(
                     {
                         name:value.querySelector("h3").innerText,
                         desc:value.querySelector("h5").innerText,
-                        imgPath:value.querySelector("img").src
+                        srcImgUrl:value.querySelector("img").src
                     }
                 )
             })
@@ -72,13 +77,12 @@ scrape = async (appid) => {
 }
 
 // takes achievement, adds buffer data to img
-addImgData = async (achievements) => {
+addImgData = async (appid,achievements) => {
 
     let promises = achievements.map( async (i) => {
 
-        //console.log('requesting buffer data for ' + i.name)
-        let d = await imgBufferData(i)
-        Object.assign(i, {img: d} )
+        console.log('upload buffer data for ' + i.name)
+        await uploadImgToS3(appid, i)
     })
 
     achievements = await Promise.all(promises)
@@ -87,20 +91,25 @@ addImgData = async (achievements) => {
     return achievements
 }
 
+// create item in s3 bucket with img data
+uploadImgToS3 = async (appid, achievement) => {
+    let data = await imgBufferData(achievement.srcImgUrl)
+
+    await s3.createObject(s3settings.bucketName, appid, md5(achievement.name) + '.jpg', data)
+}
+
 // takes path, downloads image buffer, returns buffer
-imgBufferData = async (achievement) => {
+imgBufferData = async (path) => {
 
     let options = {
-        url: achievement.imgPath,
-        encode: null,
-        method:'GET'
+        uri: path,
+        method: 'GET',
+        encoding: null
     }
 
     let data = await request(options, function(err,res,buffer) {
         return buffer
     })
-
-    //console.log('returning buffer data for ' + achievement.name)
 
     return data
 }

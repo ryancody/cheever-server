@@ -50,7 +50,7 @@ exports.findOne = async (query) => {
     
     query = parseInt(query)
     let doc = await db.collection( settings.collection ).findOne( {appid:query} )
-    console.log('find',doc)
+    //console.log('find',doc)
     fs.writeFileSync('./resp.json',JSON.stringify(doc))
     return doc
 }
