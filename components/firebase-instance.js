@@ -1,26 +1,37 @@
 const firebase = require('firebase-admin')
 const request = require('request-promise')
+const credentials = JSON.parse(require('../key/firebase.json'))
 
-// Set the configuration for your app
-config = require('../key/cheever-ee772-firebase-adminsdk-y9e1y-a8deb02b0c.json')
+// Imports the Google Cloud client library
+const {Storage} = require('@google-cloud/storage')
+ 
+// Your Google Cloud Platform project ID
+const projectId = 'cheever-ee772'
+ 
+go()
 
-firebase.initializeApp(config)
+async function go() {
 
-// Get a reference to the storage service, which is used to create references in your storage bucket
-var storage = firebase.storage()
+  let storage
 
-let storageRef = storage.ref()
-
-let imagesRef = storageRef.child('images')
-
-let curImg = imagesRef.child('newfile.jpg')
-
-let options = {
-  method:'GET',
-  encoding:null,
-  url:'https://scrapethissite.com/static/images/scraper-icon.png'
-}
-request(options, (err, res, body) => {
+  try{
+    // Creates a client
+    storage = await new Storage({
+      projectId: projectId,
+    });
+  }catch(e){
+    console.log('create client error', console.log(e))
+  }
   
-  curImg.put(body)
-})
+   
+  // The name for the new bucket
+  const bucketName = 'my-new-bucket';
+   
+  try{
+    // Creates the new bucket
+    await storage.createBucket(bucketName)
+    console.log('bucket ready')
+  }catch(e){
+    console.log('createbucket error', console.log(e))
+  }
+}

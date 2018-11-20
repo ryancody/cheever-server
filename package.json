@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha",
     "start": "node index.js",
-    "dev": "heroku local web && cd react-app && npm start"
+    "dev": "heroku local web"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/ryancody/cheever-server#readme",
   "dependencies": {
+    "@google-cloud/storage": "^2.3.1",
     "express": "^4.16.3",
     "firebase-admin": "^6.1.0",
     "mongodb": "^3.1.8",

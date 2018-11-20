@@ -3,6 +3,7 @@ const dbInstance = require('./components/dbInstance')
 const maintainDb = require('./components/maintainDb')
 const fbi = require('./components/firebase-instance')
 
+return
 
 const app = express()
 
