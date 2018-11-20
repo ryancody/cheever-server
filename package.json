@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha",
     "start": "node index.js",
-    "dev": "heroku local web && cd react-app && npm start"
+    "dev": "heroku local web"
   },
   "repository": {
     "type": "git",
