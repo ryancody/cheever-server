@@ -4,3 +4,5 @@
 /react-app/node_modules
 
 .env
+
+resp.json
