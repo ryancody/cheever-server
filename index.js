@@ -21,52 +21,50 @@ start()
 app.get('/get', get)
 async function get (req, res) {
 
-    res.append('Content-Type', 'application/json')
-    res.append('Access-Control-Allow-Origin', '*')
-
-    await dbInstance.open()
-
-    try {
-        appid = checkAppid(req.query.appid)
-    }catch(e) {
-        console.log('caught', e)
-    }
-
-    let doc = await dbInstance.findOne(appid)
-
-    dbInstance.close()
-
-    console.log('request returned successfully')
-    //console.log(doc)
-
-    res.send(doc)
+    let passedFunc = dbInstance.findOne
+    dbConnectionWrap(req, res, passedFunc)
 }
 
 // scrape cheevos based on appid
 app.get('/populateApp', populateApp)
 async function populateApp (req, res) {
 
+    let passedFunc = maintainDb.populateApp
+    dbConnectionWrap(req, res, passedFunc)
+}
+
+// framework for a db connection, pass db operation in
+async function dbConnectionWrap (req, res, passedFunc) {
+    
     res.append('Content-Type', 'application/json')
     res.append('Access-Control-Allow-Origin', '*')
 
-    await dbInstance.open()
+    try{
 
-    try {
-        appid = checkAppid(req.query.appid)
-    }catch(e) {
-        console.log('caught', e)
+        await dbInstance.open()
+
+        try {
+            appid = checkAppid(req.query.appid)
+        }catch(e) {
+            console.log('caught', e)
+        }
+    
+        let doc = await passedFunc(req.query.appid)
+    
+        dbInstance.close()
+    
+        console.log('doc returned successfully')
+        //console.log(doc)
+    
+        res.send(doc)
+    } catch (e) {
+        
+        dbInstance.close()
+        console.log(e)
     }
-
-    let doc = await maintainDb.populateApp(appid)
-
-    dbInstance.close()
-
-    console.log('doc returned successfully')
-    //console.log(doc)
-
-    res.send(doc)
 }
 
+// test db connection on start
 async function start () {
 
     try{
