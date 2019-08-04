@@ -14,6 +14,7 @@ let client, connect, db
 let tester
 
 exports.init = (s) => {
+    
     Object.assign(settings, s)
 }
 
@@ -33,13 +34,14 @@ exports.open = async () => {
         db = await connect.db(settings.dbName)
         console.log('db connection successful')
     }catch(e) {
-        console.error('connection open', e.stack)
+        console.error('connection open error:', e.stack)
     }
 }
 
 // find a document and update it
 exports.findOneAndUpdate = async (query, data) => {
     checkSettings()
+
     let doc = await db.collection( settings.collection ).findOneAndUpdate( query, {$set: data} )
     console.log('find one and update',doc)
     return doc
@@ -48,6 +50,7 @@ exports.findOneAndUpdate = async (query, data) => {
 // find a document
 exports.findOne = async (query) => {
     checkSettings()
+
     console.log('querying',query)
     
     query = parseInt(query)
