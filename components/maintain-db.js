@@ -31,7 +31,7 @@ exports.populateApp = async (appid) => {
         console.log('update complete: ' + appid)
         return doc
     }catch(e){
-        console.log(e)
+        console.error(e)
     }
 }
 
@@ -72,7 +72,7 @@ scrape = async (appid) => {
         return achievements
             
     }catch(e){
-        console.log(e.stack)
+        console.error(e.stack)
     }
 }
 

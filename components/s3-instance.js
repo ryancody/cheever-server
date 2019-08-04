@@ -17,6 +17,6 @@ exports.createObject = async (bucket, folder, item, data) => {
             else console.log('success!', data)
         })
     }catch(e){
-        console.log(e)
+        console.error(e)
     }
 }

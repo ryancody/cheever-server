@@ -46,7 +46,7 @@ async function dbConnectionWrap (req, res, passedFunc) {
         try {
             appid = checkAppid(req.query.appid)
         }catch(e) {
-            console.log('caught', e)
+            console.error('caught', e)
         }
     
         let doc = await passedFunc(req.query.appid)
@@ -60,7 +60,7 @@ async function dbConnectionWrap (req, res, passedFunc) {
     } catch (e) {
         
         dbInstance.close()
-        console.log(e)
+        console.error(e)
     }
 }
 
@@ -73,7 +73,7 @@ async function start () {
         await dbInstance.open()
         await dbInstance.close()
     }catch(e){
-        console.log(e)
+        console.error(e)
     }
 
     dbInstance.init(dbOptions)

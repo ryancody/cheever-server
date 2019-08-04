@@ -22,7 +22,7 @@ exports.open = async () => {
     try{
         checkSettings()
     }catch(e){
-        console.log(e)
+        console.error(e)
     }
     console.log('connecting to db...')
     try{
@@ -31,7 +31,7 @@ exports.open = async () => {
         db = await connect.db(settings.dbName)
         console.log('db connection successful')
     }catch(e) {
-        console.log(e.stack)
+        console.error(e.stack)
     }
 }
 
@@ -71,7 +71,7 @@ exports.close = async () => {
         await client.close()
         console.log('db connection closed')
     }catch(e) {
-        console.log(e.stack)
+        console.err(e.stack)
     }
 }
 
