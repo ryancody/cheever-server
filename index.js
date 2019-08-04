@@ -73,7 +73,7 @@ async function start () {
         await dbInstance.open()
         await dbInstance.close()
     }catch(e){
-        console.error(e)
+        console.error('connection test',e)
     }
 
     dbInstance.init(dbOptions)

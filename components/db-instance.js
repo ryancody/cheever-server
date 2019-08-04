@@ -18,20 +18,22 @@ exports.init = (s) => {
 }
 
 exports.open = async () => {
-    checkSettings()
+
     try{
         checkSettings()
     }catch(e){
-        console.error(e)
+        console.error('settings error',e)
     }
+
     console.log('connecting to db...')
+
     try{
         client = await new mongoDb.MongoClient( process.env.DB_URL, {useNewUrlParser:true} )
         connect = await client.connect()
         db = await connect.db(settings.dbName)
         console.log('db connection successful')
     }catch(e) {
-        console.error(e.stack)
+        console.error('connection open', e.stack)
     }
 }
 
