@@ -1,6 +1,7 @@
 const express = require('express')
 const dbInstance = require('./components/db-instance')
 const maintainDb = require('./components/maintain-db')
+require('dotenv').config()
 
 const app = express()
 
@@ -25,6 +26,14 @@ async function get (req, res) {
     dbConnectionWrap(req, res, passedFunc)
 }
 
+// get all entries with name containing query string
+app.get('/getAll',getAll)
+async function getAll (req, res) {
+
+    let passedFunc = dbInstance.findAll
+    dbConnectionWrap(req, res, passedFunc)
+}
+
 // scrape cheevos based on appid
 app.get('/populateApp', populateApp)
 async function populateApp (req, res) {
@@ -35,6 +44,8 @@ async function populateApp (req, res) {
 
 // framework for a db connection, pass db operation in
 async function dbConnectionWrap (req, res, passedFunc) {
+
+    let identifier = req.query.id
     
     res.append('Content-Type', 'application/json')
     res.append('Access-Control-Allow-Origin', '*')
@@ -43,13 +54,8 @@ async function dbConnectionWrap (req, res, passedFunc) {
 
         await dbInstance.open()
 
-        try {
-            appid = checkAppid(req.query.appid)
-        }catch(e) {
-            console.error('caught', e)
-        }
-    
-        let doc = await passedFunc(req.query.appid)
+        console.log('got query', identifier)
+        let doc = await passedFunc(identifier)
     
         dbInstance.close()
     

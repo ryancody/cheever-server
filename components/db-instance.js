@@ -28,6 +28,8 @@ exports.open = async () => {
 
     console.log('connecting to db...')
 
+
+
     try{
         client = await new mongoDb.MongoClient( process.env.DB_URL, {useNewUrlParser:true} )
         connect = await client.connect()
@@ -51,11 +53,26 @@ exports.findOneAndUpdate = async (query, data) => {
 exports.findOne = async (query) => {
     checkSettings()
 
-    console.log('querying',query)
+    console.log('findOne querying',query)
     
     query = parseInt(query)
     let doc = await db.collection( settings.collection ).findOne( {appid:query} )
     //console.log('find',doc)
+    fs.writeFileSync('./resp.json',JSON.stringify(doc))
+    return doc
+}
+
+// find all docs by name containing query string
+exports.findAll = async (query) => {
+    checkSettings()
+
+    
+    query = new RegExp('.*' + query + '.*', 'i')
+    console.log('findAll querying',query)
+
+    let doc = await db.collection( settings.collection ).find( {name:query} ).limit(10).toArray()
+    console.log('returned doc',doc)
+
     fs.writeFileSync('./resp.json',JSON.stringify(doc))
     return doc
 }
